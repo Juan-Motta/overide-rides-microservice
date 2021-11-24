@@ -8,8 +8,7 @@
 Microservicio de manejo de trayectos de la applicacion OVERIDE, contiene toda la logica para el manejo de trayectos mediante el uso de una API Rest.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/78517969/143321804-13d2bee2-95af-4cdb-8c0f-2568b8f46c06.png" alt="DB_Model" />
-  
+  <img src="https://user-images.githubusercontent.com/78517969/143322650-ad7be6c4-b82c-456f-ab46-a87b34668d8a.png" />
 </p>
 
 ## 💻 Requisitos
