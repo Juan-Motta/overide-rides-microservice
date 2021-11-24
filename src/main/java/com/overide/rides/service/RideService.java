@@ -17,9 +17,18 @@ public class RideService implements RideServiceInterface {
 
     @Autowired
     private RideRepository rideRepository;
-
     @Autowired
     private CityRepository cityRepository;
+
+    @Override
+    public Ride getRideById(Long id) {
+        return rideRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Ride> getRideList() {
+        return rideRepository.findAll();
+    }
 
     @Override
     public Ride saveRide(Ride ride) {
@@ -35,56 +44,6 @@ public class RideService implements RideServiceInterface {
             return rideRepository.save(ride);
         } else {
             throw new ApiRequestException("La ciudad especificada no existe en la base de datos");
-        }
-    }
-
-    @Override
-    public List<Ride> getRideList() {
-        return rideRepository.findAll();
-    }
-
-    @Override
-    public Ride getRideById(Long id) {
-        return rideRepository.findById(id).get();
-    }
-
-    @Override
-    public void deleteRideById(Long id) {
-        rideRepository.deleteById(id);
-
-    }
-
-    private boolean validateCitiesExistence(String city_from_code, String city_to_code) {
-        // verifies if the cities exist in the db
-        return cityRepository.findCityByCode(city_from_code) != null
-                && cityRepository.findCityByCode(city_to_code) != null;
-    }
-
-    private boolean rideValidations(Ride ride) {
-        // Validates the data obtained from request
-        City to = ride.getTo();
-        City from = ride.getFrom();
-        String departure_date = ride.getDeparture_date();
-        String departure_time = ride.getDeparture_time();
-        Integer passengers = ride.getPassengers();
-        Integer price = ride.getPrice();
-
-        // Nullish validation
-        if (to != null && from != null && departure_date != null && departure_time != null && passengers != null
-                && price != null) {
-            // Date and time format validation
-            if (departure_date.split("-").length == 3 && departure_time.split(":").length == 2) {
-                // Passenger and price number validation
-                if (passengers > 0 && price > 0) {
-                    return true;
-                } else {
-                    throw new ApiRequestException("Los campos de pasajeros y precio deben ser validos");
-                }
-            } else {
-                throw new ApiRequestException("Los campos de hora y/o fecha deben ser validos ");
-            }
-        } else {
-            throw new ApiRequestException("Los campos no pueden estar vacios");
         }
     }
 
@@ -112,6 +71,46 @@ public class RideService implements RideServiceInterface {
             rideFromDb.setPrice(ride.getPrice());
         }
         return this.saveRide(rideFromDb);
+    }
+
+    @Override
+    public void deleteRideById(Long id) {
+        rideRepository.deleteById(id);
+
+    }
+
+    private boolean validateCitiesExistence(String city_from_code, String city_to_code) {
+        // verifies if the cities exist in the db
+        return cityRepository.findCityByCode(city_from_code) != null
+                && cityRepository.findCityByCode(city_to_code) != null;
+    }
+
+    private boolean rideValidations(Ride ride) {
+        // Validates the data obtained from request
+        City to = ride.getTo();
+        City from = ride.getFrom();
+        String departure_date = ride.getDeparture_date();
+        String departure_time = ride.getDeparture_time();
+        Integer passengers = ride.getPassengers();
+        Integer price = ride.getPrice();
+
+        // Not null validation
+        if (to != null && from != null && departure_date != null && departure_time != null && passengers != null
+                && price != null) {
+            // Date and time format validation
+            if (departure_date.split("-").length == 3 && departure_time.split(":").length == 2) {
+                // Passenger and price number validation
+                if (passengers > 0 && price > 0) {
+                    return true;
+                } else {
+                    throw new ApiRequestException("Los campos de pasajeros y precio deben ser validos");
+                }
+            } else {
+                throw new ApiRequestException("Los campos de hora y/o fecha deben ser validos ");
+            }
+        } else {
+            throw new ApiRequestException("Los campos no pueden estar vacios");
+        }
     }
 
 }

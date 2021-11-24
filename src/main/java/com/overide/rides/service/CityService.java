@@ -17,12 +17,25 @@ public class CityService implements CityServiceInterface {
     private CityRepository cityRepository;
 
     @Override
-    public City saveCity(City city) {
-        if (cityRepository.findCityByCode(city.getCode()) == null
-                && cityRepository.findCityByName(city.getName()) == null) {
-            return cityRepository.save(city);
+    public City getCityByCode(String code) {
+        if (cityRepository.findCityByCode(code) != null) {
+            return cityRepository.findCityByCode(code);
         } else {
-            throw new ApiRequestException("El nombre o codigo del registro no puede estar repetido");
+            throw new ApiRequestException("No existe una ciudad identificada con el codigo " + code);
+        }
+    }
+
+    @Override
+    public City getCityByName(String name) {
+        return cityRepository.findCityByName(name);
+    }
+
+    @Override
+    public City getCityById(Long id) {
+        if (cityRepository.findCityById(id) != null) {
+            return cityRepository.findCityById(id);
+        } else {
+            throw new ApiRequestException("No existe una ciudad identificada con el id " + id);
         }
     }
 
@@ -32,41 +45,47 @@ public class CityService implements CityServiceInterface {
     }
 
     @Override
-    public City getCityById(Long id) {
-        return cityRepository.findById(id).get();
-    }
+    public City saveCity(City city) {
+        if (cityRepository.findCityByCode(city.getCode()) == null
+                && cityRepository.findCityByName(city.getName()) == null) {
+            return cityRepository.save(city);
 
-    @Override
-    public void deleteCityById(Long id) {
-        cityRepository.deleteById(id);
-    }
+        } else {
+            throw new ApiRequestException("El nombre o codigo del registro no puede estar repetido");
 
-    @Override
-    public City getCityByCode(String code) {
-        return cityRepository.findCityByCode(code);
-    }
-
-    @Override
-    public City getCityByName(String name) {
-        return cityRepository.findCityByName(name);
+        }
     }
 
     @Override
     public City updateCityById(City city, Long id) {
+        // obtains city from db using id
         City cityFromDb = cityRepository.findById(id).get();
+
+        // verifies wich field exists
         if (city.getCode() != null && city.getName() != null) {
             cityFromDb.setName(city.getName());
             cityFromDb.setCode(city.getCode());
             return cityRepository.save(cityFromDb);
+
         } else if (city.getName() != null) {
             cityFromDb.setName(city.getName());
             return cityRepository.save(cityFromDb);
+
         } else if (city.getCode() != null) {
             cityFromDb.setCode(city.getCode());
             return cityRepository.save(cityFromDb);
+
         } else {
             throw new ApiRequestException("Los campos ingresados deben ser validos");
+
         }
+    }
+
+    @Override
+    public void deleteCityById(Long id) {
+        City city = new City();
+        this.updateCityById(city, id);
+        cityRepository.deleteById(id);
     }
 
 }

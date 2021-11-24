@@ -281,3 +281,9 @@ http://localhost:8080/rides/id/1
 * Creadas validaciones para ciudades
 * Creadas validaciónes para trayectos
 * Creado manejador de errores para la aplicación
+
+#### 0.3.1
+
+* Corregidos fallos en la eliminacion de trayectos
+* Corregidos fallos en la verificacion de trayectos y ciudades
+
