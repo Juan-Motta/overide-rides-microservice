@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  rides:
+    build:
+      context: ./
+      dockerfile: ./
+    volumes:
+      - /data/rides
+    ports:
+      - 8080:8080
