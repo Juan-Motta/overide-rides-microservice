@@ -83,8 +83,6 @@ public class CityService implements CityServiceInterface {
 
     @Override
     public void deleteCityById(Long id) {
-        City city = new City();
-        this.updateCityById(city, id);
         cityRepository.deleteById(id);
     }
 
