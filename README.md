@@ -298,3 +298,7 @@ http://localhost:8080/rides/id/1
 #### 1.0.1
 
 * Corregido error que arrojaba el mensaje de error "message": "Los campos ingresados deben ser validos" al intentar eliminar una ciudad y que impedia eliminar esta correctamente.
+
+#### 1.0.2
+
+* Corregido problema que impedia eliminar un trayecto. Cambiada relacion entre entidades de CascadeType.ALL a CascadeType.PERSIST.
